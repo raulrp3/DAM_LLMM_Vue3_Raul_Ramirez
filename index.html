@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>EJERCICIOS VUE</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div id="app" class="container mt-2">
+		<h1>People of Vue</h1>
+		<label for="inputName">Name: </label>
+		<input type="text" id="inputName" class="form-control" v-model = "name"
+		@keyup.enter = "addName" placeholder="Add name">
+		<ul class="list-group mt-2">
+			<li v-for = "person in people" class="list-group-item">
+				{{ person.name }}.
+				{{ person.vote }}.
+				<button class="btn btn-primary mx-5" @click = "sumVotes($index)">Vote</button>
+			</li>
+		</ul>
+		<h2 class="mt-2">Our Mayor is {{ mayor }}</h2>
+	</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.js"></script>
+<script>
+	new Vue({
+		el : "#app",
+		data: {
+			people: [],
+			name: "",
+		},
+		methods: {
+			addName: function(){
+				if (this.name === "c"){
+					this.restarVotes();
+				}else{
+					this.people.push({name: this.name, vote: 0});
+				}
+			},
+			sumVotes: function(index){
+				this.people[index].vote++;
+			},
+			restarVotes: function(){
+				this.people.forEach(function(element){
+					element.vote = 0;
+				});
+			}
+		},
+		computed: {
+			mayor: function(){
+				let indexMayor;
+				let votesMayor = 0;
+				this.people.forEach(function(element, index){
+					if (element.vote > votesMayor){
+						votesMayor = element.vote;
+						indexMayor = index;
+					}
+				});
+				return this.people[indexMayor].name;
+			}
+		}
+	});
+</script>
+</html>
